@@ -12,7 +12,7 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 public abstract class AbstractParser<T extends AbstractParser<T>> {
     protected ScriptObjectMirror scriptObjectMirror = null;
 
-    public T parse(ScriptObjectMirror obj) {
+    protected T parse(ScriptObjectMirror obj) {
         if (obj == null) {
             return null;
         }

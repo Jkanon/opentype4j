@@ -1,8 +1,10 @@
 package com.weihq.opentype4j;
 
-import com.weihq.opentype4j.engine.ScriptObjectMirrorUtils;
+import com.weihq.opentype4j.util.SVGUtils;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +23,27 @@ public class Path extends AbstractParser<Path> {
 
     private int strokeWidth;
 
+    /**
+     * Convert the path to a string of svg dom.
+     * @return
+     */
     public String toSVG() {
-        String path = toSVGPath();
-
-        return path;
+        return SVGUtils.toSVGDomString(toSVGPath());
     }
 
+    /**
+     * Save the path to a svg file
+     * @param path The path of svg file
+     * @throws IOException
+     */
+    public void toSVG(String path) throws IOException {
+        SVGUtils.writeToSVG(new File(path), toSVGPath());
+    }
+
+    /**
+     * Convert the Path to a string of svg path data.
+     * @return
+     */
     public String toSVGPath() {
         return (String) scriptObjectMirror.callMember("toSVG");
     }
@@ -75,5 +92,15 @@ public class Path extends AbstractParser<Path> {
 
     public void setStrokeWidth(int strokeWidth) {
         this.strokeWidth = strokeWidth;
+    }
+
+    @Override
+    public String toString() {
+        return "Path{" +
+                "commands=" + commands +
+                ", fill='" + fill + '\'' +
+                ", stroke='" + stroke + '\'' +
+                ", strokeWidth=" + strokeWidth +
+                '}';
     }
 }

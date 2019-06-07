@@ -26,6 +26,7 @@ build/
 *.diff
 *.patch
 *.tmp
+tmp/
 
 # system ignore
 .DS_Store

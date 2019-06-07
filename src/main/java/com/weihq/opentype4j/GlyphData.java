@@ -92,4 +92,16 @@ public class GlyphData extends AbstractParser<GlyphData> {
     public void setLeftSideBearing(int leftSideBearing) {
         this.leftSideBearing = leftSideBearing;
     }
+
+    @Override
+    public String toString() {
+        return "GlyphData{" +
+                "index=" + index +
+                ", name='" + name + '\'' +
+                ", unicode=" + unicode +
+                ", unicodes=" + unicodes +
+                ", advancedWidth=" + advancedWidth +
+                ", leftSideBearing=" + leftSideBearing +
+                '}';
+    }
 }

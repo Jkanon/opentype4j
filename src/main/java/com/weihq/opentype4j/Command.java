@@ -1,7 +1,5 @@
 package com.weihq.opentype4j;
 
-import com.weihq.opentype4j.engine.ScriptObjectMirrorUtils;
-
 /**
  * ${DESCRIPTION}
  *

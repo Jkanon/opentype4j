@@ -46,6 +46,4 @@ public class OpenType {
         ScriptObjectMirror jsFont = (ScriptObjectMirror) compiledScript.eval(ctx);
         return new Font().parse(jsFont);
     }
-
-
 }

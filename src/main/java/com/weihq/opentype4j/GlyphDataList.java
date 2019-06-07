@@ -32,4 +32,12 @@ public class GlyphDataList extends AbstractParser<GlyphDataList> {
     public GlyphData get(int index) {
         return glyphs.get(index);
     }
+
+    @Override
+    public String toString() {
+        return "GlyphDataList{" +
+                "length=" + length +
+                ", glyphs=" + glyphs +
+                '}';
+    }
 }
