@@ -1,11 +1,11 @@
 package com.weihq.opentype4j;
 
-import com.weihq.opentype4j.util.SVGUtils;
+import com.weihq.opentype4j.render.FontCell;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.script.ScriptException;
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -15,19 +15,20 @@ import java.io.IOException;
  * @date 2019/06/07
  **/
 public class PathTest {
+    private Font font;
+
     @Test
-    public void testToSVG() throws IOException, ScriptException {
-        Font font = OpenType.parse(TestUtils.assemblyFilePath("Open-Sans-WOFF-1.0.woff"));
-        Path path = font.getGlyphs().get(4).getPath();
-        ByteArrayInputStream is = new ByteArrayInputStream(path.toSVG().getBytes("utf-8"));
-        FileOutputStream fs = new FileOutputStream(TestUtils.assemblyOutFilePath( "test.png"));
-        SVGUtils.convertSVGToPng(is, fs);
+    public void testToImage() throws IOException {
+        font.getGlyphs().get(4).getPath().toImage(new File(TestUtils.assemblyOutFilePath("test.jpg")));
     }
 
     @Test
-    public void testToSVGFile() throws IOException, ScriptException {
-        Font font = OpenType.parse(TestUtils.assemblyFilePath("Open-Sans-WOFF-1.0.woff"));
-        Path path = font.getGlyphs().get(4).getPath();
-        path.toSVG(TestUtils.assemblyOutFilePath("test.svg"));
+    public void testToSVGFile() throws IOException {
+        font.getGlyphs().get(4).getPath(new FontCell(100, 100)).toSVG(TestUtils.assemblyOutFilePath("test.svg"));
+    }
+
+    @Before
+    public void initFont() throws ScriptException, IOException {
+        font = OpenType.parse(TestUtils.assemblyFilePath("Open-Sans-WOFF-1.0.woff"));
     }
 }

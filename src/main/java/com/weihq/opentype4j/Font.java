@@ -1,6 +1,7 @@
 package com.weihq.opentype4j;
 
 import com.weihq.opentype4j.table.CmapTable;
+import com.weihq.opentype4j.table.HeadTable;
 import com.weihq.opentype4j.util.StringUtils;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
@@ -37,29 +38,17 @@ public class Font extends AbstractParser<Font> {
 
     private Map<String, Object> tables = new HashMap<>();
 
-    @Override
-    protected void parse() {
-        this.numGlyphs = fetchIntValue("numGlyphs");
-        this.isCIDFont = fetchBooleanValue("isCIDFont");
-        this.defaultWidthX = fetchIntValue("defaultWidthX");
-        this.nominalWidthX = fetchIntValue("nominalWidthX");
-        this.unitsPerEm = fetchIntValue("unitsPerEm");
-        this.ascender = fetchIntValue("ascender");
-        this.descender = fetchIntValue("descender");
-        this.outlinesFormat = fetch("outlinesFormat");
-        this.glyphNames = new GlyphNames().parse(fetch("glyphNames"));
-        this.glyphs = new GlyphDataList().parse(fetch("glyphs"));
-        ScriptObjectMirror tables = fetch("tables");
-
-        this.tables.put("cmap", new CmapTable().parse((ScriptObjectMirror) tables.get("cmap")));
-    }
-
     public CmapTable getCamp() {
         return (CmapTable) tables.get("cmap");
     }
 
+    public HeadTable getHead() {
+        return (HeadTable) tables.get("head");
+    }
+
     /**
      * Check if the font has a glyph for the given character.
+     *
      * @param charcode
      * @return
      */
@@ -71,6 +60,7 @@ public class Font extends AbstractParser<Font> {
      * Convert the given character to a single glyph index.
      * Note that this function assumes that there is a one-to-one mapping between
      * the given character and a glyph; for complex scripts this might not be the case.
+     *
      * @param charCode
      * @return
      */
@@ -87,6 +77,7 @@ public class Font extends AbstractParser<Font> {
      * Convert the given character to a single Glyph object.
      * Note that this function assumes that there is a one-to-one mapping between
      * the given character and a glyph; for complex scripts this might not be the case.
+     *
      * @param charCode
      * @return
      */
@@ -98,6 +89,7 @@ public class Font extends AbstractParser<Font> {
     /**
      * Gets the index of a glyph by name.
      * {@link GlyphNames#nameToGlyphIndex(String)}
+     *
      * @param name
      * @return
      */
@@ -107,6 +99,7 @@ public class Font extends AbstractParser<Font> {
 
     /**
      * Convert the given glyph name to a single Glyph object.
+     *
      * @param name
      * @return
      */
@@ -118,6 +111,7 @@ public class Font extends AbstractParser<Font> {
     /**
      * Gets the glyph name by index
      * {@link GlyphNames#glyphIndexToName(int)}
+     *
      * @param gid
      * @return
      */
@@ -132,6 +126,27 @@ public class Font extends AbstractParser<Font> {
             return glyphs.get(0);
         }
         return glyphData;
+    }
+
+
+    @Override
+    protected void parse() {
+        this.numGlyphs = fetchIntValue("numGlyphs");
+        this.isCIDFont = fetchBooleanValue("isCIDFont");
+        this.defaultWidthX = fetchIntValue("defaultWidthX");
+        this.nominalWidthX = fetchIntValue("nominalWidthX");
+        this.unitsPerEm = fetchIntValue("unitsPerEm");
+        this.ascender = fetchIntValue("ascender");
+        this.descender = fetchIntValue("descender");
+        this.outlinesFormat = fetch("outlinesFormat");
+        this.glyphNames = new GlyphNames().parse(fetch("glyphNames"));
+        this.glyphs = new GlyphDataList();
+        this.glyphs.setFont(this);
+        this.glyphs.parse(fetch("glyphs"));
+        ScriptObjectMirror tables = fetch("tables");
+
+        this.tables.put("cmap", new CmapTable().parse((ScriptObjectMirror) tables.get("cmap")));
+        this.tables.put("head", new HeadTable().parse((ScriptObjectMirror) tables.get("head")));
     }
 
     public GlyphNames getGlyphNames() {

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ${DESCRIPTION}
+ * A list of {@link GlyphData}
  *
  * @author Jkanon
  * @date 2019/06/06
@@ -18,19 +18,27 @@ public class GlyphDataList extends AbstractParser<GlyphDataList> {
 
     private List<GlyphData> glyphs = new ArrayList<>();
 
+    private Font font;
+
     @Override
     protected void parse() {
         ScriptObjectMirror glyphsList = fetch("glyphs");
         if (glyphsList != null) {
             this.length = glyphsList.size();
             for (int i = 0; i < length; i++) {
-                this.glyphs.add(new GlyphData().parse(ScriptObjectMirrorUtils.getObject(glyphsList, ""+i)));
+                GlyphData glyph = new GlyphData().parse(ScriptObjectMirrorUtils.getObject(glyphsList, ""+i));
+                glyph.setFont(this.font);
+                this.glyphs.add(glyph);
             }
         }
     }
 
     public GlyphData get(int index) {
         return glyphs.get(index);
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
     }
 
     @Override

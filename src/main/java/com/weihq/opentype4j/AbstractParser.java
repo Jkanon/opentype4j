@@ -4,13 +4,13 @@ import com.weihq.opentype4j.engine.ScriptObjectMirrorUtils;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 /**
- * Interface for converting javascript object to java object
+ * Abstract class for converting javascript object to java object
  *
  * @author Jkanon
  * @date 2019/06/06
  **/
 public abstract class AbstractParser<T extends AbstractParser<T>> {
-    protected ScriptObjectMirror scriptObjectMirror = null;
+    ScriptObjectMirror scriptObjectMirror = null;
 
     protected T parse(ScriptObjectMirror obj) {
         if (obj == null) {
@@ -27,8 +27,16 @@ public abstract class AbstractParser<T extends AbstractParser<T>> {
         return ScriptObjectMirrorUtils.getObject(scriptObjectMirror, key);
     }
 
+    protected long fetchLongValue(String key) {
+        return ScriptObjectMirrorUtils.getLong(scriptObjectMirror, key);
+    }
+
     protected int fetchIntValue(String key) {
         return ScriptObjectMirrorUtils.getInt(scriptObjectMirror, key);
+    }
+
+    protected short fetchShortValue(String key) {
+        return ScriptObjectMirrorUtils.getShort(scriptObjectMirror, key);
     }
 
     protected boolean fetchBooleanValue(String key) {

@@ -1,18 +1,24 @@
 package com.weihq.opentype4j;
 
 import com.weihq.opentype4j.engine.ScriptObjectMirrorUtils;
+import com.weihq.opentype4j.render.FontCell;
+import com.weihq.opentype4j.table.HeadTable;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ${DESCRIPTION}
+ * A Glyph is an individual mark that often corresponds to a character.<br/>
+ * Some glyphs, such as ligatures, are a combination of many characters.<br/>
+ * Glyphs are the basic building blocks of a font.
  *
  * @author Jkanon
  * @date 2019/06/06
  **/
 public class GlyphData extends AbstractParser<GlyphData> {
+    private Font font;
+
     private int index;
 
     private String name;
@@ -21,28 +27,74 @@ public class GlyphData extends AbstractParser<GlyphData> {
 
     private List<Integer> unicodes = new ArrayList<>();
 
-    private int advancedWidth;
+    private int advanceWidth;
 
     private int leftSideBearing;
 
+    private short xMin;
+
+    private short yMin;
+
+    private short xMax;
+
+    private short yMax;
+
+    public Path getPath(double x, double y, double fontSize) {
+        Path path = new Path().parse((ScriptObjectMirror) scriptObjectMirror.callMember("getPath", x, y, fontSize));
+        path.setWidth(font.getHead().getxMax() - font.getHead().getxMin());
+        path.setHeight(font.getHead().getyMax() - font.getHead().getyMin());
+
+        return path;
+    }
+
+    public Path getPath(FontCell fontCell) {
+        HeadTable head = font.getHead();
+        int w = fontCell.getFontWidth();
+        int h = fontCell.getFontHeight();
+        double maxHeight = head.getyMax() - head.getyMin();
+        double fontScale = Math.min((double) w / (head.getxMax() - head.getxMin()), h / maxHeight);
+        double glyphWidth = (double) getAdvanceWidth() * fontScale;
+        double xMin = (fontCell.getWidth() - glyphWidth) / 2;
+        double fontBaseline = fontCell.getMarginTop() + h * head.getyMax() / maxHeight;
+        double fontSize = fontScale * font.getUnitsPerEm();
+
+        Path path = getPath(xMin, fontBaseline, fontSize);
+        path.setWidth(fontCell.getWidth());
+        path.setHeight(fontCell.getHeight());
+
+        return path;
+    }
+
+    public Path getPath() {
+        return getPath(new FontCell());
+    }
+
     @Override
     protected void parse() {
-        this.index = fetchIntValue( "index");
+        this.index = fetchIntValue("index");
         this.name = fetch("name");
-        this.advancedWidth = fetchIntValue("advancedWidth");
+        this.advanceWidth = fetchIntValue("advanceWidth");
         this.leftSideBearing = fetchIntValue("leftSideBearing");
         this.unicode = fetchIntValue("unicode");
-        ScriptObjectMirror unicodesList = fetch( "unicodes");
+        ScriptObjectMirror unicodesList = fetch("unicodes");
         if (unicodesList != null) {
             int length = unicodesList.size();
             for (int i = 0; i < length; i++) {
                 this.unicodes.add(ScriptObjectMirrorUtils.getObject(unicodesList, "" + i));
             }
         }
+        this.xMax = fetchShortValue("xMax");
+        this.yMax = fetchShortValue("yMax");
+        this.xMin = fetchShortValue("xMin");
+        this.yMin = fetchShortValue("yMin");
     }
 
-    public Path getPath() {
-        return new Path().parse((ScriptObjectMirror) scriptObjectMirror.callMember("getPath", 0, 60));
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
     }
 
     public int getIndex() {
@@ -77,12 +129,12 @@ public class GlyphData extends AbstractParser<GlyphData> {
         this.unicodes = unicodes;
     }
 
-    public int getAdvancedWidth() {
-        return advancedWidth;
+    public int getAdvanceWidth() {
+        return advanceWidth;
     }
 
-    public void setAdvancedWidth(int advancedWidth) {
-        this.advancedWidth = advancedWidth;
+    public void setAdvanceWidth(int advanceWidth) {
+        this.advanceWidth = advanceWidth;
     }
 
     public int getLeftSideBearing() {
@@ -93,6 +145,38 @@ public class GlyphData extends AbstractParser<GlyphData> {
         this.leftSideBearing = leftSideBearing;
     }
 
+    public short getxMin() {
+        return xMin;
+    }
+
+    public void setxMin(short xMin) {
+        this.xMin = xMin;
+    }
+
+    public short getyMin() {
+        return yMin;
+    }
+
+    public void setyMin(short yMin) {
+        this.yMin = yMin;
+    }
+
+    public short getxMax() {
+        return xMax;
+    }
+
+    public void setxMax(short xMax) {
+        this.xMax = xMax;
+    }
+
+    public short getyMax() {
+        return yMax;
+    }
+
+    public void setyMax(short yMax) {
+        this.yMax = yMax;
+    }
+
     @Override
     public String toString() {
         return "GlyphData{" +
@@ -100,8 +184,12 @@ public class GlyphData extends AbstractParser<GlyphData> {
                 ", name='" + name + '\'' +
                 ", unicode=" + unicode +
                 ", unicodes=" + unicodes +
-                ", advancedWidth=" + advancedWidth +
+                ", advanceWidth=" + advanceWidth +
                 ", leftSideBearing=" + leftSideBearing +
+                ", xMin=" + xMin +
+                ", yMin=" + yMin +
+                ", xMax=" + xMax +
+                ", yMax=" + yMax +
                 '}';
     }
 }

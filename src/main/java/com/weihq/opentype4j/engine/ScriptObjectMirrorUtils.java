@@ -27,4 +27,30 @@ public class ScriptObjectMirrorUtils {
         }
         return (Integer) val;
     }
+
+    public static short getShort(ScriptObjectMirror obj, String key) {
+        Object val = obj.get(key);
+        if (val == null) {
+            return 0;
+        }
+        if (val instanceof Double) {
+            return ((Double) val).shortValue();
+        }
+        if (val instanceof Long) {
+            return ((Long) val).shortValue();
+        }
+        return (Short) val;
+    }
+
+    public static long getLong(ScriptObjectMirror obj, String key) {
+        Object val = obj.get(key);
+        if (val == null) {
+            return 0;
+        }
+        if (val instanceof Double) {
+            return ((Double) val).longValue();
+        }
+
+        return (Long) val;
+    }
 }

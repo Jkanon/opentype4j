@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * ${DESCRIPTION}
+ * The "cmap" table of a font.
  *
  * @author Jkanon
  * @date 2019/06/06
@@ -56,7 +56,14 @@ public class CmapTable extends AbstractParser<CmapTable> {
         this.groupCount = fetchIntValue("groupCount");
         ScriptObjectMirror glyphIndexMap = fetch("glyphIndexMap");
         for (Map.Entry<String, Object> entry : glyphIndexMap.entrySet()) {
-            this.characterCodeToGlyphId.put(Integer.parseInt(entry.getKey()), (Integer) entry.getValue());
+            Object object = entry.getValue();
+            int val;
+            if (object instanceof Double) {
+                val = ((Double) object).intValue();
+            } else {
+                val = (Integer) object;
+            }
+            this.characterCodeToGlyphId.put(Integer.parseInt(entry.getKey()), val);
         }
     }
 

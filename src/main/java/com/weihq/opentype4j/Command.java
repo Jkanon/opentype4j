@@ -1,7 +1,7 @@
 package com.weihq.opentype4j;
 
 /**
- * ${DESCRIPTION}
+ * A dictionary containing a type and coordinates.
  *
  * @author Jkanon
  * @date 2019/06/06

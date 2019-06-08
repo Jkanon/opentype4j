@@ -1,9 +1,12 @@
 package com.weihq.opentype4j.util;
 
+import com.weihq.opentype4j.render.ImageFormat;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 
@@ -19,17 +22,7 @@ public class SVGUtils {
 
     private static String CHARSET_STRING_UTF8 = "UTF-8";
 
-    public static String toSVGDomString(String svgPathElement) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<?xml version=\"1.0\" standalone=\"no\"?>\n");
-        sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
-        sb.append("<svg width=\"100%\" height=\"100%\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n");
-        sb.append(svgPathElement);
-        sb.append("\n</svg>");
-        return sb.toString();
-    }
-
-    public static void writeToSVG(File file, String svgPathElement)
+    public static void writeToSVG(File file, String svgDomString)
             throws IOException {
         File dir = file.getParentFile();
         if (dir != null && !dir.exists()) {
@@ -40,7 +33,7 @@ public class SVGUtils {
             OutputStream os = new FileOutputStream(file);
             OutputStreamWriter osw = new OutputStreamWriter(os, CHARSET_STRING_UTF8);
             writer = new BufferedWriter(osw);
-            writer.write(toSVGDomString(svgPathElement));
+            writer.write(svgDomString);
             writer.flush();
         } finally {
             try {
@@ -53,20 +46,23 @@ public class SVGUtils {
         }
     }
 
-    public static void convertSVGToPng(InputStream in, OutputStream out) {
+    public static void converSVGToImage(InputStream in, OutputStream out, ImageFormat format) {
         try {
-            PNGTranscoder t = new PNGTranscoder();
+            ImageTranscoder transcoder;
+            if (format == ImageFormat.JPEG) {
+                transcoder = new JPEGTranscoder();
+                transcoder.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
+            } else {
+                transcoder = new PNGTranscoder();
+            }
             TranscoderInput input = new TranscoderInput(in);
             TranscoderOutput output = new TranscoderOutput(out);
-            t.transcode(input, output);
+            transcoder.transcode(input, output);
             out.flush();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                out.close();
-            } catch (IOException e) {
-            }
+            IOUtils.closeQuietly(out);
         }
     }
 }

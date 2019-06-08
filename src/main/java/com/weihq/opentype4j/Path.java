@@ -1,15 +1,15 @@
 package com.weihq.opentype4j;
 
+import com.weihq.opentype4j.render.ImageFormat;
 import com.weihq.opentype4j.util.SVGUtils;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ${DESCRIPTION}
+ * A Path containing a set of path commands similar to a SVG path.
  *
  * @author Jkanon
  * @date 2019/06/06
@@ -23,12 +23,20 @@ public class Path extends AbstractParser<Path> {
 
     private int strokeWidth;
 
+    private int width;
+
+    private int height;
+
     /**
      * Convert the path to a string of svg dom.
      * @return
      */
     public String toSVG() {
-        return SVGUtils.toSVGDomString(toSVGPath());
+        return "<?xml version=\"1.0\" standalone=\"no\"?>\n" +
+                "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" +
+                "<svg width=\"" + (width == 0 ? "100%" : width) + "\" height=\"" + (height == 0 ? "100%" : height) + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+                toSVGPath() +
+                "\n</svg>";
     }
 
     /**
@@ -37,7 +45,7 @@ public class Path extends AbstractParser<Path> {
      * @throws IOException
      */
     public void toSVG(String path) throws IOException {
-        SVGUtils.writeToSVG(new File(path), toSVGPath());
+        SVGUtils.writeToSVG(new File(path), toSVG());
     }
 
     /**
@@ -46,6 +54,51 @@ public class Path extends AbstractParser<Path> {
      */
     public String toSVGPath() {
         return (String) scriptObjectMirror.callMember("toSVG");
+    }
+
+    /**
+     * Convert the path to a image file
+     * @param file
+     * @throws IOException
+     */
+    public void toImage(File file) throws IOException {
+        toImage(file, ImageFormat.JPEG);
+    }
+
+    public void toImage(File file, ImageFormat format) throws IOException {
+        ByteArrayInputStream is = new ByteArrayInputStream(toSVG().getBytes());
+        FileOutputStream fs = new FileOutputStream(file);
+        SVGUtils.converSVGToImage(is, fs, format);
+    }
+
+    /**
+     * Convert the path to a image bytes
+     * @throws IOException
+     */
+    public byte[] toImageBytes() throws IOException {
+        return toImageBytes(ImageFormat.JPEG);
+    }
+
+    /**
+     * Convert the path to byte array of the image
+     * @param format
+     * @return
+     * @throws IOException
+     */
+    public byte[] toImageBytes(ImageFormat format) throws IOException {
+        ByteArrayInputStream is = new ByteArrayInputStream(toSVG().getBytes());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        SVGUtils.converSVGToImage(is, os, format);
+        return os.toByteArray();
+    }
+
+    /**
+     * Calculate the bounding box of the path.
+     * @return
+     */
+    public BoundingBox getBoundingBox() {
+        ScriptObjectMirror getBoundingBoxFunc = (ScriptObjectMirror)scriptObjectMirror.get("getBoundingBox");
+        return new BoundingBox().parse((ScriptObjectMirror) getBoundingBoxFunc.call(scriptObjectMirror));
     }
 
     @Override
@@ -94,6 +147,22 @@ public class Path extends AbstractParser<Path> {
         this.strokeWidth = strokeWidth;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     @Override
     public String toString() {
         return "Path{" +
@@ -101,6 +170,8 @@ public class Path extends AbstractParser<Path> {
                 ", fill='" + fill + '\'' +
                 ", stroke='" + stroke + '\'' +
                 ", strokeWidth=" + strokeWidth +
+                ", width=" + width +
+                ", height=" + height +
                 '}';
     }
 }

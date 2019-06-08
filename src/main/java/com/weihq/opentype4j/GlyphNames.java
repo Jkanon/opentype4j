@@ -15,15 +15,6 @@ import java.util.Map;
 public class GlyphNames extends AbstractParser<GlyphNames> {
     private List<String> names;
 
-    @Override
-    protected void parse() {
-        ScriptObjectMirror names = fetch("names");
-        this.names = new ArrayList<>(names.size());
-        for (Map.Entry<String, Object> entry : names.entrySet()) {
-            this.names.add(Integer.parseInt(entry.getKey()), (String) entry.getValue());
-        }
-    }
-
     /**
      * Gets the index of a glyph by name.
      * @param name Glyph name
@@ -40,5 +31,21 @@ public class GlyphNames extends AbstractParser<GlyphNames> {
      */
     public String glyphIndexToName(int glyId) {
         return this.names.get(glyId);
+    }
+
+    @Override
+    protected void parse() {
+        ScriptObjectMirror names = fetch("names");
+        this.names = new ArrayList<>(names.size());
+        for (Map.Entry<String, Object> entry : names.entrySet()) {
+            this.names.add(Integer.parseInt(entry.getKey()), (String) entry.getValue());
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "GlyphNames{" +
+                "names=" + names +
+                '}';
     }
 }
