@@ -6,8 +6,7 @@ API
 ### Loading a font
 ```java
 Font font = OpenType.parse(filePath);
-GlyphDataList glyphs = font.getGlyphs();
-System.out.println(font.nameToGlyph("one").getPath().toSVG())
+System.out.println(font.getPath("you are right").toSVG())
 ```
 
 ### The Font object

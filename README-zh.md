@@ -6,8 +6,7 @@ API
 ### 加载字体文件
 ```java
 Font font = OpenType.parse(filePath);
-GlyphDataList glyphs = font.getGlyphs();
-System.out.println(font.nameToGlyph("one").getPath().toSVG())
+System.out.println(font.getPath("you are right").toSVG())
 ```
 
 ### Font类
