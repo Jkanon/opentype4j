@@ -49,10 +49,10 @@ public class GlyphData extends AbstractParser<GlyphData> {
 
     public Path getPath(FontCell fontCell) {
         HeadTable head = font.getHead();
-        int w = fontCell.getFontWidth();
-        int h = fontCell.getFontHeight();
+        double w = fontCell.getFontWidth();
+        double h = fontCell.getFontHeight();
         double maxHeight = head.getyMax() - head.getyMin();
-        double fontScale = Math.min((double) w / (head.getxMax() - head.getxMin()), h / maxHeight);
+        double fontScale = Math.min(w / (head.getxMax() - head.getxMin()), h / maxHeight);
         double glyphWidth = (double) getAdvanceWidth() * fontScale;
         double xMin = (fontCell.getWidth() - glyphWidth) / 2;
         double fontBaseline = fontCell.getMarginTop() + h * head.getyMax() / maxHeight;

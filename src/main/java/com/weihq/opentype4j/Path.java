@@ -23,9 +23,9 @@ public class Path extends AbstractParser<Path> {
 
     private int strokeWidth;
 
-    private int width;
+    private double width;
 
-    private int height;
+    private double height;
 
     /**
      * Convert the path to a string of svg dom.
@@ -34,7 +34,7 @@ public class Path extends AbstractParser<Path> {
     public String toSVG() {
         return "<?xml version=\"1.0\" standalone=\"no\"?>\n" +
                 "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" +
-                "<svg width=\"" + (width == 0 ? "100%" : width) + "\" height=\"" + (height == 0 ? "100%" : height) + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+                "<svg width=\"" + (width <= 0 ? "100%" : width) + "\" height=\"" + (height <= 0 ? "100%" : height) + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                 toSVGPath() +
                 "\n</svg>";
     }
@@ -147,19 +147,19 @@ public class Path extends AbstractParser<Path> {
         this.strokeWidth = strokeWidth;
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(double width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 
