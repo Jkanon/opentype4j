@@ -12,6 +12,12 @@ System.out.println(font.nameToGlyph("one").getPath().toSVG())
 
 ### The Font object
 A Font represents a loaded OpenType font file. 
+##### `Font.getPath(String text)`
+Convert specified to a Path object with default size. 
+
+##### `Font.getPath()`
+Convert all glyph to a Path object with default size. (default: 16 fonts in one line and per font with size of 44*40)
+
 ##### `Font.nameToGlyph(String name)`
 Convert the given glyph name to a single GlyphData object.
 

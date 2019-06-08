@@ -24,7 +24,16 @@ public class PathTest {
 
     @Test
     public void testToSVGFile() throws IOException {
-        font.getGlyphs().get(4).getPath(new FontCell(100, 100)).toSVG(TestUtils.assemblyOutFilePath("test.svg"));
+        font.getGlyphs().get(4).getPath().toSVG(TestUtils.assemblyOutFilePath("test.svg"));
+    }
+
+    @Test
+    public void testExtend() throws IOException {
+        FontCell fontCell = new FontCell();
+        fontCell.setRelativeX(100);
+        font.getGlyphs().get(4).getPath(new FontCell(100, 100)).extend(
+                font.getGlyphs().get(5).getPath(fontCell)
+        ).toSVG(TestUtils.assemblyOutFilePath("test.svg"));
     }
 
     @Before

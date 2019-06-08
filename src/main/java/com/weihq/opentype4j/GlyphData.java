@@ -39,6 +39,8 @@ public class GlyphData extends AbstractParser<GlyphData> {
 
     private short yMax;
 
+    private short numberOfContours;
+
     public Path getPath(double x, double y, double fontSize) {
         Path path = new Path().parse((ScriptObjectMirror) scriptObjectMirror.callMember("getPath", x, y, fontSize));
         path.setWidth(font.getHead().getxMax() - font.getHead().getxMin());
@@ -58,9 +60,9 @@ public class GlyphData extends AbstractParser<GlyphData> {
         double fontBaseline = fontCell.getMarginTop() + h * head.getyMax() / maxHeight;
         double fontSize = fontScale * font.getUnitsPerEm();
 
-        Path path = getPath(xMin, fontBaseline, fontSize);
-        path.setWidth(fontCell.getWidth());
-        path.setHeight(fontCell.getHeight());
+        Path path = getPath(fontCell.getRelativeX() + xMin, fontCell.getRelativeY() + fontBaseline, fontSize);
+        path.setWidth(fontCell.getWidth() + fontCell.getRelativeX());
+        path.setHeight(fontCell.getHeight() + fontCell.getRelativeY());
 
         return path;
     }
@@ -87,6 +89,7 @@ public class GlyphData extends AbstractParser<GlyphData> {
         this.yMax = fetchShortValue("yMax");
         this.xMin = fetchShortValue("xMin");
         this.yMin = fetchShortValue("yMin");
+        this.numberOfContours = fetchShortValue("numberOfContours");
     }
 
     public Font getFont() {
@@ -177,6 +180,14 @@ public class GlyphData extends AbstractParser<GlyphData> {
         this.yMax = yMax;
     }
 
+    public short getNumberOfContours() {
+        return numberOfContours;
+    }
+
+    public void setNumberOfContours(short numberOfContours) {
+        this.numberOfContours = numberOfContours;
+    }
+
     @Override
     public String toString() {
         return "GlyphData{" +
@@ -190,6 +201,7 @@ public class GlyphData extends AbstractParser<GlyphData> {
                 ", yMin=" + yMin +
                 ", xMax=" + xMax +
                 ", yMax=" + yMax +
+                ", numberOfContours=" + numberOfContours +
                 '}';
     }
 }

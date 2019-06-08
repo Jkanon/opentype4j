@@ -33,8 +33,16 @@ public class GlyphDataList extends AbstractParser<GlyphDataList> {
         }
     }
 
+    public int getLength() {
+        return length;
+    }
+
     public GlyphData get(int index) {
         return glyphs.get(index);
+    }
+
+    public List<GlyphData> getGlyphs() {
+        return glyphs;
     }
 
     public void setFont(Font font) {

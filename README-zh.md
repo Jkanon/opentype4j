@@ -12,6 +12,12 @@ System.out.println(font.nameToGlyph("one").getPath().toSVG())
 
 ### Font类
 一个Font类对应一个开放字体文件
+##### `Font.getPath(String text)`
+获取指定文本的字形的默认的路径数据。默认情况下，一行最大排列16个字符，每个字符尺寸为44*40
+
+##### `Font.getPath()`
+获取所有的字形顺序排列的默认路径数据
+
 ##### `Font.nameToGlyph(String name)`
 根据字符名称查找对应的GlyphData
 

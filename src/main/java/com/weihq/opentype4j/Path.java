@@ -29,6 +29,7 @@ public class Path extends AbstractParser<Path> {
 
     /**
      * Convert the path to a string of svg dom.
+     *
      * @return
      */
     public String toSVG() {
@@ -41,6 +42,7 @@ public class Path extends AbstractParser<Path> {
 
     /**
      * Save the path to a svg file
+     *
      * @param path The path of svg file
      * @throws IOException
      */
@@ -50,6 +52,7 @@ public class Path extends AbstractParser<Path> {
 
     /**
      * Convert the Path to a string of svg path data.
+     *
      * @return
      */
     public String toSVGPath() {
@@ -58,6 +61,7 @@ public class Path extends AbstractParser<Path> {
 
     /**
      * Convert the path to a image file
+     *
      * @param file
      * @throws IOException
      */
@@ -65,6 +69,12 @@ public class Path extends AbstractParser<Path> {
         toImage(file, ImageFormat.JPEG);
     }
 
+    /**
+     * Convert the path to a image file with specified format
+     *
+     * @param file
+     * @throws IOException
+     */
     public void toImage(File file, ImageFormat format) throws IOException {
         ByteArrayInputStream is = new ByteArrayInputStream(toSVG().getBytes());
         FileOutputStream fs = new FileOutputStream(file);
@@ -73,6 +83,7 @@ public class Path extends AbstractParser<Path> {
 
     /**
      * Convert the path to a image bytes
+     *
      * @throws IOException
      */
     public byte[] toImageBytes() throws IOException {
@@ -81,6 +92,7 @@ public class Path extends AbstractParser<Path> {
 
     /**
      * Convert the path to byte array of the image
+     *
      * @param format
      * @return
      * @throws IOException
@@ -94,11 +106,23 @@ public class Path extends AbstractParser<Path> {
 
     /**
      * Calculate the bounding box of the path.
+     *
      * @return
      */
     public BoundingBox getBoundingBox() {
-        ScriptObjectMirror getBoundingBoxFunc = (ScriptObjectMirror)scriptObjectMirror.get("getBoundingBox");
+        ScriptObjectMirror getBoundingBoxFunc = (ScriptObjectMirror) scriptObjectMirror.get("getBoundingBox");
         return new BoundingBox().parse((ScriptObjectMirror) getBoundingBoxFunc.call(scriptObjectMirror));
+    }
+
+    public Path extend(Path input) {
+        this.commands.addAll(input.getCommands());
+        this.width = Math.max(this.width, input.width);
+        this.height = Math.max(this.height, input.height);
+        if (scriptObjectMirror != null && input.scriptObjectMirror != null) {
+            ((ScriptObjectMirror) scriptObjectMirror.get("extend")).call(scriptObjectMirror, input.scriptObjectMirror);
+        }
+
+        return this;
     }
 
     @Override

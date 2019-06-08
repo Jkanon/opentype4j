@@ -12,7 +12,6 @@ public class OpenTypeTest {
     @Test
     public void testParseWoff() throws Exception {
         Font font = OpenType.parse(TestUtils.assemblyFilePath("Open-Sans-WOFF-1.0.woff"));
-        font.nameToGlyph("one").getPath().getBoundingBox();
         System.out.println(font.nameToGlyph("one").getPath().toSVGPath());
     }
 

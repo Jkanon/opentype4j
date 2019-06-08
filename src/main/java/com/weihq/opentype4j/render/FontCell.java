@@ -17,6 +17,10 @@ public class FontCell {
 
     private double marginBottom = 8;
 
+    private double relativeX = 0;
+
+    private double relativeY = 0;
+
     public FontCell() {
     }
 
@@ -27,6 +31,13 @@ public class FontCell {
         this.marginBottom = (int) scale * this.marginBottom;
         this.width = width;
         this.height = height;
+    }
+
+    public FontCell(double width, double height, double relativeX, double relativeY) {
+        this.width = width;
+        this.height = height;
+        this.relativeX = relativeX;
+        this.relativeY = relativeY;
     }
 
     public double getFontWidth() {
@@ -77,6 +88,22 @@ public class FontCell {
         this.marginBottom = marginBottom;
     }
 
+    public double getRelativeX() {
+        return relativeX;
+    }
+
+    public void setRelativeX(double relativeX) {
+        this.relativeX = relativeX;
+    }
+
+    public double getRelativeY() {
+        return relativeY;
+    }
+
+    public void setRelativeY(double relativeY) {
+        this.relativeY = relativeY;
+    }
+
     @Override
     public String toString() {
         return "FontCell{" +
@@ -85,6 +112,8 @@ public class FontCell {
                 ", marginLeftRight=" + marginLeftRight +
                 ", marginTop=" + marginTop +
                 ", marginBottom=" + marginBottom +
+                ", relativeX=" + relativeX +
+                ", relativeY=" + relativeY +
                 '}';
     }
 }

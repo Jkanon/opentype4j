@@ -1,11 +1,14 @@
 package com.weihq.opentype4j;
 
+import com.weihq.opentype4j.render.FontCell;
 import com.weihq.opentype4j.table.CmapTable;
 import com.weihq.opentype4j.table.HeadTable;
 import com.weihq.opentype4j.util.StringUtils;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,6 +47,45 @@ public class Font extends AbstractParser<Font> {
 
     public HeadTable getHead() {
         return (HeadTable) tables.get("head");
+    }
+
+    public Path getPath(String text) {
+        return getPath(stringToGlyphs(text), null, null);
+    }
+
+    public Path getPath() {
+        return getPath(null, null);
+    }
+
+    public Path getPath(FontCell fontCell, Integer maxFontPerline) {
+        return getPath(this.glyphs.getGlyphs(), fontCell, maxFontPerline);
+    }
+
+    public Path getPath(List<GlyphData> glyphs, FontCell fontCell, Integer maxFontPerline) {
+        if (fontCell == null) {
+            fontCell = new FontCell();
+        }
+        if (maxFontPerline == null || maxFontPerline <= 16) {
+            maxFontPerline = 16;
+        }
+        int length = glyphs.size();
+        Path path = null;
+        for (int i = 0; i < length; i++) {
+            GlyphData glyphData = glyphs.get(i);
+
+            Path curPath = glyphData.getPath(new FontCell(
+                    fontCell.getWidth(), fontCell.getHeight(),
+                    fontCell.getWidth() * (i % maxFontPerline),
+                    fontCell.getHeight() * (i / maxFontPerline)
+            ));
+            if (path == null) {
+                path = curPath;
+            } else {
+                path = path.extend(curPath);
+            }
+        }
+
+        return path;
     }
 
     /**
@@ -119,6 +161,34 @@ public class Font extends AbstractParser<Font> {
         return this.glyphNames.glyphIndexToName(gid);
     }
 
+    /**
+     * Convert the given text to a list of Glyph objects.<br/>
+     * Note that there is no strict one-to-one mapping between characters and<br/>
+     * glyphs, so the list of returned glyphs can be larger or smaller than the<br/>
+     * length of the given string.
+     *
+     * @param text
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<GlyphData> stringToGlyphs(String text) {
+        ScriptObjectMirror list = (ScriptObjectMirror) ((ScriptObjectMirror) scriptObjectMirror.get("stringToGlyphIndexes")).call(scriptObjectMirror, text);
+        List<GlyphData> glyphs = new ArrayList<>(list.size());
+        GlyphData notdef = this.glyphs.get(0);
+        for (int i = 0, len = list.size(); i < len; i++) {
+            GlyphData glyphData = this.glyphs.get((Integer) list.get("" + i));
+            glyphs.add(glyphData == null ? notdef : glyphData);
+        }
+
+        return glyphs;
+    }
+
+    /**
+     * fetch .notdef glyph when not found
+     *
+     * @param index
+     * @return
+     */
     private GlyphData getGlyphByDefault(int index) {
         GlyphData glyphData = glyphs.get(index);
         if (glyphData == null) {
