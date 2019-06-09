@@ -4,7 +4,6 @@ import com.weihq.opentype4j.render.FontCell;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.script.ScriptException;
 import java.io.File;
 import java.io.IOException;
 
@@ -37,7 +36,7 @@ public class PathTest {
     }
 
     @Before
-    public void initFont() throws ScriptException, IOException {
+    public void initFont() throws IOException {
         font = OpenType.parse(TestUtils.assemblyFilePath("Open-Sans-WOFF-1.0.woff"));
     }
 }
