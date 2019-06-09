@@ -23,7 +23,7 @@ public class GlyphData extends AbstractParser<GlyphData> {
 
     private String name;
 
-    private int unicode;
+    private Integer unicode;
 
     private List<Integer> unicodes = new ArrayList<>();
 
@@ -77,7 +77,10 @@ public class GlyphData extends AbstractParser<GlyphData> {
         this.name = fetch("name");
         this.advanceWidth = fetchIntValue("advanceWidth");
         this.leftSideBearing = fetchIntValue("leftSideBearing");
-        this.unicode = fetchIntValue("unicode");
+        Object unicode = fetch("unicode");
+        if (unicode != null && !ScriptObjectMirror.isUndefined(unicode)) {
+            this.unicode = fetchIntValue("unicode");
+        }
         ScriptObjectMirror unicodesList = fetch("unicodes");
         if (unicodesList != null) {
             int length = unicodesList.size();
@@ -116,11 +119,11 @@ public class GlyphData extends AbstractParser<GlyphData> {
         this.name = name;
     }
 
-    public int getUnicode() {
+    public Integer getUnicode() {
         return unicode;
     }
 
-    public void setUnicode(int unicode) {
+    public void setUnicode(Integer unicode) {
         this.unicode = unicode;
     }
 
