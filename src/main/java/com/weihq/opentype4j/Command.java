@@ -16,8 +16,8 @@ public class Command extends AbstractParser<Command> {
     @Override
     protected void parse() {
         this.type = fetch("type");
-        this.x = fetch("x");
-        this.y = fetch("y");
+        this.x = fetchDoubleValue("x");
+        this.y = fetchDoubleValue("y");
     }
 
     public String getType() {

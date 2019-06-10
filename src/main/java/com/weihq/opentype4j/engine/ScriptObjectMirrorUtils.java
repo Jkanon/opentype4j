@@ -39,6 +39,9 @@ public class ScriptObjectMirrorUtils {
         if (val instanceof Long) {
             return ((Long) val).shortValue();
         }
+        if (val instanceof Integer) {
+            return ((Integer) val).shortValue();
+        }
         return (Short) val;
     }
 
@@ -50,7 +53,25 @@ public class ScriptObjectMirrorUtils {
         if (val instanceof Double) {
             return ((Double) val).longValue();
         }
+        if (val instanceof Integer) {
+            return ((Integer) val).longValue();
+        }
 
         return (Long) val;
+    }
+
+    public static double getDouble(ScriptObjectMirror obj, String key) {
+        Object val = obj.get(key);
+        if (val == null) {
+            return 0;
+        }
+        if (val instanceof Long) {
+            return ((Long) val).doubleValue();
+        }
+        if (val instanceof Integer) {
+            return ((Integer) val).doubleValue();
+        }
+
+        return (Double) val;
     }
 }

@@ -31,6 +31,10 @@ public abstract class AbstractParser<T extends AbstractParser<T>> {
         return ScriptObjectMirrorUtils.getLong(scriptObjectMirror, key);
     }
 
+    protected double fetchDoubleValue(String key) {
+        return ScriptObjectMirrorUtils.getDouble(scriptObjectMirror, key);
+    }
+
     protected int fetchIntValue(String key) {
         return ScriptObjectMirrorUtils.getInt(scriptObjectMirror, key);
     }

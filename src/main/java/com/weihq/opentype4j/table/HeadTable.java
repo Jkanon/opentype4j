@@ -29,8 +29,8 @@ public class HeadTable extends AbstractParser<HeadTable> {
 
     @Override
     protected void parse() {
-        this.version = fetch("version");
-        this.fontRevision = fetch("fontRevision");
+        this.version = fetchDoubleValue("version");
+        this.fontRevision = fetchDoubleValue("fontRevision");
         this.checkSumAdjustment = fetchLongValue("checkSumAdjustment");
         this.magicNumber = fetchLongValue("magicNumber");
         this.flags = fetchIntValue("flags");
