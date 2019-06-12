@@ -61,6 +61,7 @@ public class Font extends AbstractParser<Font> {
         return getPath(this.glyphs.getGlyphs(), fontCell, maxFontPerline);
     }
 
+    @SuppressWarnings("IntegerDivisionInFloatingPointContext")
     public Path getPath(List<GlyphData> glyphs, FontCell fontCell, Integer maxFontPerLine) {
         if (fontCell == null) {
             fontCell = new FontCell();
@@ -76,7 +77,7 @@ public class Font extends AbstractParser<Font> {
             Path curPath = glyphData.getPath(new FontCell(
                     fontCell.getWidth(), fontCell.getHeight(),
                     fontCell.getWidth() * (i % maxFontPerLine),
-                    fontCell.getHeight() * ((double)i / maxFontPerLine)
+                    fontCell.getHeight() * (i / maxFontPerLine)
             ));
             if (path == null) {
                 path = curPath;
