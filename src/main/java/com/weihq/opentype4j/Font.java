@@ -61,12 +61,12 @@ public class Font extends AbstractParser<Font> {
         return getPath(this.glyphs.getGlyphs(), fontCell, maxFontPerline);
     }
 
-    public Path getPath(List<GlyphData> glyphs, FontCell fontCell, Integer maxFontPerline) {
+    public Path getPath(List<GlyphData> glyphs, FontCell fontCell, Integer maxFontPerLine) {
         if (fontCell == null) {
             fontCell = new FontCell();
         }
-        if (maxFontPerline == null || maxFontPerline <= 16) {
-            maxFontPerline = 16;
+        if (maxFontPerLine == null || maxFontPerLine <= 0) {
+            maxFontPerLine = 16;
         }
         int length = glyphs.size();
         Path path = null;
@@ -75,8 +75,8 @@ public class Font extends AbstractParser<Font> {
 
             Path curPath = glyphData.getPath(new FontCell(
                     fontCell.getWidth(), fontCell.getHeight(),
-                    fontCell.getWidth() * (i % maxFontPerline),
-                    fontCell.getHeight() * (i / maxFontPerline)
+                    fontCell.getWidth() * (i % maxFontPerLine),
+                    fontCell.getHeight() * ((double)i / maxFontPerLine)
             ));
             if (path == null) {
                 path = curPath;
@@ -91,11 +91,11 @@ public class Font extends AbstractParser<Font> {
     /**
      * Check if the font has a glyph for the given character.
      *
-     * @param charcode
+     * @param charCode
      * @return
      */
-    public boolean hasChar(int charcode) {
-        return (boolean) scriptObjectMirror.callMember("hasChar");
+    public boolean hasChar(int charCode) {
+        return (boolean) scriptObjectMirror.callMember("hasChar", StringUtils.fromCharCode(charCode));
     }
 
     /**
