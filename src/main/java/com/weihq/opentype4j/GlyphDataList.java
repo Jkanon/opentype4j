@@ -1,6 +1,6 @@
 package com.weihq.opentype4j;
 
-import com.weihq.opentype4j.engine.ScriptObjectMirrorUtils;
+import com.weihq.opentype4j.engine.ScriptObjectMirrorWrapper;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import java.util.ArrayList;
@@ -24,9 +24,10 @@ public class GlyphDataList extends AbstractParser<GlyphDataList> {
     protected void parse() {
         ScriptObjectMirror glyphsList = scriptObjectMirror.get("glyphs");
         if (glyphsList != null) {
-            this.length = glyphsList.size();
+            ScriptObjectMirrorWrapper wrapper = new ScriptObjectMirrorWrapper(glyphsList);
+            this.length = wrapper.size();
             for (int i = 0; i < length; i++) {
-                GlyphData glyph = new GlyphData().parse(ScriptObjectMirrorUtils.getObject(glyphsList, ""+i));
+                GlyphData glyph = new GlyphData().parse(wrapper.get(""+i));
                 glyph.setFont(this.font);
                 this.glyphs.add(glyph);
             }
