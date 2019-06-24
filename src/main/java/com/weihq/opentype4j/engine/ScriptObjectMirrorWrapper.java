@@ -2,8 +2,6 @@ package com.weihq.opentype4j.engine;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
-import java.util.Arrays;
-
 /**
  * @author Jkanon
  * @date 2019/06/24
@@ -16,11 +14,31 @@ public class ScriptObjectMirrorWrapper {
     }
 
     public Object callMember(String functionName, Object... args) {
-        ScriptObjectMirror func = (ScriptObjectMirror)scriptObjectMirror.get(functionName);
+        ScriptObjectMirror func = (ScriptObjectMirror) scriptObjectMirror.get(functionName);
         if (args.length == 0) {
             return func.call(scriptObjectMirror);
         }
         return func.call(scriptObjectMirror, args);
+    }
+
+    public int size() {
+        return scriptObjectMirror.size();
+    }
+
+    public boolean isArray() {
+        return scriptObjectMirror.isArray();
+    }
+
+    public boolean isFunction() {
+        return scriptObjectMirror.isFunction();
+    }
+
+    public boolean isFrozen() {
+        return scriptObjectMirror.isFrozen();
+    }
+
+    public boolean isEmpty() {
+        return scriptObjectMirror.isEmpty();
     }
 
     @SuppressWarnings("unchecked")

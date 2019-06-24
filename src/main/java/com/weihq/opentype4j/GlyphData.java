@@ -1,6 +1,6 @@
 package com.weihq.opentype4j;
 
-import com.weihq.opentype4j.engine.ScriptObjectMirrorUtils;
+import com.weihq.opentype4j.engine.ScriptObjectMirrorWrapper;
 import com.weihq.opentype4j.render.FontCell;
 import com.weihq.opentype4j.table.HeadTable;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
@@ -83,9 +83,10 @@ public class GlyphData extends AbstractParser<GlyphData> {
         }
         ScriptObjectMirror unicodeList = scriptObjectMirror.get("unicodes");
         if (unicodeList != null) {
-            int length = unicodeList.size();
+            ScriptObjectMirrorWrapper wrapper = new ScriptObjectMirrorWrapper(unicodeList);
+            int length = wrapper.size();
             for (int i = 0; i < length; i++) {
-                this.unicodes.add(ScriptObjectMirrorUtils.getObject(unicodeList, "" + i));
+                this.unicodes.add(wrapper.getInt( "" + i));
             }
         }
         this.xMax = scriptObjectMirror.getShortValue("xMax");
