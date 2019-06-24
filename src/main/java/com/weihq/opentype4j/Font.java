@@ -173,7 +173,7 @@ public class Font extends AbstractParser<Font> {
      */
     @SuppressWarnings("unchecked")
     public List<GlyphData> stringToGlyphs(String text) {
-        ScriptObjectMirror list = (ScriptObjectMirror) ((ScriptObjectMirror) scriptObjectMirror.get("stringToGlyphIndexes")).call(scriptObjectMirror, text);
+        ScriptObjectMirror list = (ScriptObjectMirror) (scriptObjectMirror.callMember("stringToGlyphIndexes", text));
         List<GlyphData> glyphs = new ArrayList<>(list.size());
         GlyphData notdef = this.glyphs.get(0);
         for (int i = 0, len = list.size(); i < len; i++) {
@@ -202,19 +202,19 @@ public class Font extends AbstractParser<Font> {
 
     @Override
     protected void parse() {
-        this.numGlyphs = fetchIntValue("numGlyphs");
-        this.isCIDFont = fetchBooleanValue("isCIDFont");
-        this.defaultWidthX = fetchIntValue("defaultWidthX");
-        this.nominalWidthX = fetchIntValue("nominalWidthX");
-        this.unitsPerEm = fetchIntValue("unitsPerEm");
-        this.ascender = fetchIntValue("ascender");
-        this.descender = fetchIntValue("descender");
-        this.outlinesFormat = fetch("outlinesFormat");
-        this.glyphNames = new GlyphNames().parse(fetch("glyphNames"));
+        this.numGlyphs = scriptObjectMirror.getIntValue("numGlyphs");
+        this.isCIDFont = scriptObjectMirror.getBooleanValue("isCIDFont");
+        this.defaultWidthX = scriptObjectMirror.getIntValue("defaultWidthX");
+        this.nominalWidthX = scriptObjectMirror.getIntValue("nominalWidthX");
+        this.unitsPerEm = scriptObjectMirror.getIntValue("unitsPerEm");
+        this.ascender = scriptObjectMirror.getIntValue("ascender");
+        this.descender = scriptObjectMirror.getIntValue("descender");
+        this.outlinesFormat = scriptObjectMirror.get("outlinesFormat");
+        this.glyphNames = new GlyphNames().parse(scriptObjectMirror.get("glyphNames"));
         this.glyphs = new GlyphDataList();
         this.glyphs.setFont(this);
-        this.glyphs.parse(fetch("glyphs"));
-        ScriptObjectMirror tables = fetch("tables");
+        this.glyphs.parse(scriptObjectMirror.get("glyphs"));
+        ScriptObjectMirror tables = scriptObjectMirror.get("tables");
 
         this.tables.put("cmap", new CmapTable().parse((ScriptObjectMirror) tables.get("cmap")));
         this.tables.put("head", new HeadTable().parse((ScriptObjectMirror) tables.get("head")));

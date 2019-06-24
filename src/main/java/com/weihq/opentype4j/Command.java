@@ -15,9 +15,9 @@ public class Command extends AbstractParser<Command> {
 
     @Override
     protected void parse() {
-        this.type = fetch("type");
-        this.x = fetchDoubleValue("x");
-        this.y = fetchDoubleValue("y");
+        this.type = scriptObjectMirror.get("type");
+        this.x = scriptObjectMirror.getDouble("x");
+        this.y = scriptObjectMirror.getDouble("y");
     }
 
     public String getType() {

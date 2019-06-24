@@ -6,11 +6,27 @@ import java.io.Reader;
 /**
  * Javascript engine wrapper
  *
- * @author weihq
+ * @author Jkanon
  * @date 2019/04/05
  **/
 public class JavaScriptEngine {
     private ScriptEngine engine;
+
+    private static int versionCode;
+
+    static {
+        String javaVersion = System.getProperty("java.version");
+        int index = 0;
+        int cnt = 2;
+        for (int i = 0; i < cnt; i++) {
+            index = javaVersion.indexOf(".", index);
+            index++;
+        }
+        javaVersion = javaVersion.substring(0, index);
+        javaVersion = javaVersion.replaceAll("\\.", "");
+        versionCode = Integer.parseInt(javaVersion);
+    }
+
 
     private static class JavaScriptEngineHolder {
         private static final JavaScriptEngine INSTANCE = new JavaScriptEngine();
@@ -21,7 +37,7 @@ public class JavaScriptEngine {
     }
 
     private JavaScriptEngine() {
-        this.engine = new ScriptEngineManager().getEngineByName("javascript");
+        this.engine = new ScriptEngineManager().getEngineByName(versionCode >= 18 ? "nashorn" : "javascript");
     }
 
     public Object eval(String expression, ScriptContext ctx) throws ScriptException {
@@ -33,11 +49,11 @@ public class JavaScriptEngine {
     }
 
     public CompiledScript compile(String expression) throws ScriptException {
-        return  ((Compilable)engine).compile(expression);
+        return ((Compilable) engine).compile(expression);
     }
 
     public CompiledScript compile(Reader reader) throws ScriptException {
-        return  ((Compilable)engine).compile(reader);
+        return ((Compilable) engine).compile(reader);
     }
 
 }

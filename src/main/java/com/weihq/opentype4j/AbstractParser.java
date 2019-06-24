@@ -1,6 +1,6 @@
 package com.weihq.opentype4j;
 
-import com.weihq.opentype4j.engine.ScriptObjectMirrorUtils;
+import com.weihq.opentype4j.engine.ScriptObjectMirrorWrapper;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 /**
@@ -10,40 +10,17 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
  * @date 2019/06/06
  **/
 public abstract class AbstractParser<T extends AbstractParser<T>> {
-    ScriptObjectMirror scriptObjectMirror = null;
+    protected ScriptObjectMirrorWrapper scriptObjectMirror = null;
 
+    @SuppressWarnings("unchecked")
     protected T parse(ScriptObjectMirror obj) {
         if (obj == null) {
             return null;
         }
-        scriptObjectMirror = obj;
+        scriptObjectMirror = new ScriptObjectMirrorWrapper(obj);
         parse();
         return (T) this;
     }
 
     abstract protected void parse();
-
-    protected <E> E fetch(String key) {
-        return ScriptObjectMirrorUtils.getObject(scriptObjectMirror, key);
-    }
-
-    protected long fetchLongValue(String key) {
-        return ScriptObjectMirrorUtils.getLong(scriptObjectMirror, key);
-    }
-
-    protected double fetchDoubleValue(String key) {
-        return ScriptObjectMirrorUtils.getDouble(scriptObjectMirror, key);
-    }
-
-    protected int fetchIntValue(String key) {
-        return ScriptObjectMirrorUtils.getInt(scriptObjectMirror, key);
-    }
-
-    protected short fetchShortValue(String key) {
-        return ScriptObjectMirrorUtils.getShort(scriptObjectMirror, key);
-    }
-
-    protected boolean fetchBooleanValue(String key) {
-        return Boolean.TRUE.equals(fetch(key));
-    }
 }

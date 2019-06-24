@@ -110,8 +110,7 @@ public class Path extends AbstractParser<Path> {
      * @return
      */
     public BoundingBox getBoundingBox() {
-        ScriptObjectMirror getBoundingBoxFunc = (ScriptObjectMirror) scriptObjectMirror.get("getBoundingBox");
-        return new BoundingBox().parse((ScriptObjectMirror) getBoundingBoxFunc.call(scriptObjectMirror));
+        return new BoundingBox().parse((ScriptObjectMirror) scriptObjectMirror.callMember("getBoundingBox"));
     }
 
     public Path extend(Path input) {
@@ -119,7 +118,7 @@ public class Path extends AbstractParser<Path> {
         this.width = Math.max(this.width, input.width);
         this.height = Math.max(this.height, input.height);
         if (scriptObjectMirror != null && input.scriptObjectMirror != null) {
-            ((ScriptObjectMirror) scriptObjectMirror.get("extend")).call(scriptObjectMirror, input.scriptObjectMirror);
+            scriptObjectMirror.callMember("extend", input.scriptObjectMirror.get());
         }
 
         return this;
@@ -127,16 +126,16 @@ public class Path extends AbstractParser<Path> {
 
     @Override
     protected void parse() {
-        ScriptObjectMirror commands = fetch("commands");
+        ScriptObjectMirror commands = scriptObjectMirror.get("commands");
         if (commands != null) {
             int length = commands.size();
             for (int i = 0; i < length; i++) {
                 this.commands.add(new Command().parse(commands));
             }
         }
-        this.fill = fetch("fill");
-        this.stroke = fetch("stroke");
-        this.strokeWidth = fetchIntValue("strokeWidth");
+        this.fill = scriptObjectMirror.get("fill");
+        this.stroke = scriptObjectMirror.get("stroke");
+        this.strokeWidth = scriptObjectMirror.getIntValue("strokeWidth");
     }
 
     public List<Command> getCommands() {

@@ -73,26 +73,26 @@ public class GlyphData extends AbstractParser<GlyphData> {
 
     @Override
     protected void parse() {
-        this.index = fetchIntValue("index");
-        this.name = fetch("name");
-        this.advanceWidth = fetchIntValue("advanceWidth");
-        this.leftSideBearing = fetchIntValue("leftSideBearing");
-        Object unicode = fetch("unicode");
+        this.index = scriptObjectMirror.getIntValue("index");
+        this.name = scriptObjectMirror.get("name");
+        this.advanceWidth = scriptObjectMirror.getIntValue("advanceWidth");
+        this.leftSideBearing = scriptObjectMirror.getIntValue("leftSideBearing");
+        Object unicode = scriptObjectMirror.get("unicode");
         if (unicode != null && !ScriptObjectMirror.isUndefined(unicode)) {
-            this.unicode = fetchIntValue("unicode");
+            this.unicode = scriptObjectMirror.getIntValue("unicode");
         }
-        ScriptObjectMirror unicodesList = fetch("unicodes");
-        if (unicodesList != null) {
-            int length = unicodesList.size();
+        ScriptObjectMirror unicodeList = scriptObjectMirror.get("unicodes");
+        if (unicodeList != null) {
+            int length = unicodeList.size();
             for (int i = 0; i < length; i++) {
-                this.unicodes.add(ScriptObjectMirrorUtils.getObject(unicodesList, "" + i));
+                this.unicodes.add(ScriptObjectMirrorUtils.getObject(unicodeList, "" + i));
             }
         }
-        this.xMax = fetchShortValue("xMax");
-        this.yMax = fetchShortValue("yMax");
-        this.xMin = fetchShortValue("xMin");
-        this.yMin = fetchShortValue("yMin");
-        this.numberOfContours = fetchShortValue("numberOfContours");
+        this.xMax = scriptObjectMirror.getShortValue("xMax");
+        this.yMax = scriptObjectMirror.getShortValue("yMax");
+        this.xMin = scriptObjectMirror.getShortValue("xMin");
+        this.yMin = scriptObjectMirror.getShortValue("yMin");
+        this.numberOfContours = scriptObjectMirror.getShortValue("numberOfContours");
     }
 
     public Font getFont() {

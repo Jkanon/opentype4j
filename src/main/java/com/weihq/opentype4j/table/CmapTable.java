@@ -48,21 +48,15 @@ public class CmapTable extends AbstractParser<CmapTable> {
 
     @Override
     protected void parse() {
-        this.version = fetchIntValue("version");
-        this.numTables = fetchIntValue("numTables");
-        this.format = fetchIntValue("format");
-        this.length = fetchIntValue("length");
-        this.language = fetchIntValue("language");
-        this.groupCount = fetchIntValue("groupCount");
-        ScriptObjectMirror glyphIndexMap = fetch("glyphIndexMap");
+        this.version = scriptObjectMirror.getIntValue("version");
+        this.numTables = scriptObjectMirror.getIntValue("numTables");
+        this.format = scriptObjectMirror.getIntValue("format");
+        this.length = scriptObjectMirror.getIntValue("length");
+        this.language = scriptObjectMirror.getIntValue("language");
+        this.groupCount = scriptObjectMirror.getIntValue("groupCount");
+        ScriptObjectMirror glyphIndexMap = scriptObjectMirror.get("glyphIndexMap");
         for (Map.Entry<String, Object> entry : glyphIndexMap.entrySet()) {
-            Object object = entry.getValue();
-            int val;
-            if (object instanceof Double) {
-                val = ((Double) object).intValue();
-            } else {
-                val = (Integer) object;
-            }
+            int val = ((Number) entry.getValue()).intValue();
             this.characterCodeToGlyphId.put(Integer.parseInt(entry.getKey()), val);
         }
     }

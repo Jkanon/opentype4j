@@ -29,23 +29,23 @@ public class HeadTable extends AbstractParser<HeadTable> {
 
     @Override
     protected void parse() {
-        this.version = fetchDoubleValue("version");
-        this.fontRevision = fetchDoubleValue("fontRevision");
-        this.checkSumAdjustment = fetchLongValue("checkSumAdjustment");
-        this.magicNumber = fetchLongValue("magicNumber");
-        this.flags = fetchIntValue("flags");
-        this.unitsPerEm = fetchIntValue("unitsPerEm");
-        this.created = fetchLongValue("created");
-        this.modified = fetchLongValue("modified");
-        this.xMin = fetchShortValue("xMin");
-        this.yMin = fetchShortValue("yMin");
-        this.xMax = fetchShortValue("xMax");
-        this.yMax = fetchShortValue("yMax");
-        this.macStyle = fetchIntValue("macStyle");
-        this.lowestRecPPEM = fetchIntValue("lowestRecPPEM");
-        this.fontDirectionHint = fetchShortValue("fontDirectionHint");
-        this.indexToLocFormat = fetchShortValue("indexToLocFormat");
-        this.glyphDataFormat = fetchShortValue("glyphDataFormat");
+        this.version = scriptObjectMirror.getDoubleValue("version");
+        this.fontRevision = scriptObjectMirror.getDoubleValue("fontRevision");
+        this.checkSumAdjustment = scriptObjectMirror.getLongValue("checkSumAdjustment");
+        this.magicNumber = scriptObjectMirror.getLongValue("magicNumber");
+        this.flags = scriptObjectMirror.getIntValue("flags");
+        this.unitsPerEm = scriptObjectMirror.getIntValue("unitsPerEm");
+        this.created = scriptObjectMirror.getLongValue("created");
+        this.modified = scriptObjectMirror.getLongValue("modified");
+        this.xMin = scriptObjectMirror.getShortValue("xMin");
+        this.yMin = scriptObjectMirror.getShortValue("yMin");
+        this.xMax = scriptObjectMirror.getShortValue("xMax");
+        this.yMax = scriptObjectMirror.getShortValue("yMax");
+        this.macStyle = scriptObjectMirror.getIntValue("macStyle");
+        this.lowestRecPPEM = scriptObjectMirror.getIntValue("lowestRecPPEM");
+        this.fontDirectionHint = scriptObjectMirror.getShortValue("fontDirectionHint");
+        this.indexToLocFormat = scriptObjectMirror.getShortValue("indexToLocFormat");
+        this.glyphDataFormat = scriptObjectMirror.getShortValue("glyphDataFormat");
     }
 
     public double getVersion() {

@@ -35,7 +35,7 @@ public class GlyphNames extends AbstractParser<GlyphNames> {
 
     @Override
     protected void parse() {
-        ScriptObjectMirror names = fetch("names");
+        ScriptObjectMirror names = scriptObjectMirror.get("names");
         this.names = new ArrayList<>(names.size());
         for (Map.Entry<String, Object> entry : names.entrySet()) {
             this.names.add(Integer.parseInt(entry.getKey()), (String) entry.getValue());

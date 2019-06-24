@@ -22,7 +22,7 @@ public class GlyphDataList extends AbstractParser<GlyphDataList> {
 
     @Override
     protected void parse() {
-        ScriptObjectMirror glyphsList = fetch("glyphs");
+        ScriptObjectMirror glyphsList = scriptObjectMirror.get("glyphs");
         if (glyphsList != null) {
             this.length = glyphsList.size();
             for (int i = 0; i < length; i++) {

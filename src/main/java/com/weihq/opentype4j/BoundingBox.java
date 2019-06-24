@@ -85,10 +85,10 @@ public class BoundingBox extends AbstractParser<BoundingBox> {
 
     @Override
     protected void parse() {
-        this.lowerLeftX = fetch("x1");
-        this.upperRightX = fetch("x2");
-        this.lowerLeftY = fetch("y1");
-        this.upperRightY = fetch("y2");
+        this.lowerLeftX = scriptObjectMirror.get("x1");
+        this.upperRightX = scriptObjectMirror.get("x2");
+        this.lowerLeftY = scriptObjectMirror.get("y1");
+        this.upperRightY = scriptObjectMirror.get("y2");
     }
 
     public double getLowerLeftX() {
