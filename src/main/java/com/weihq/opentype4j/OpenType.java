@@ -34,7 +34,7 @@ public class OpenType {
             if (compiledScript == null) {
                 synchronized (OpenType.class) {
                     if (compiledScript == null) {
-                        compiledScript = JavaScriptEngine.getInstance().compile(
+                        compiledScript = JavaScriptEngine.compile(
                                 new BufferedReader(new InputStreamReader(OpenType.class.getResourceAsStream("/" + JS_NAME)))
                         );
                     }

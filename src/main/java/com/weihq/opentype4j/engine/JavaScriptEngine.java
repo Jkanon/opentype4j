@@ -10,7 +10,7 @@ import java.io.Reader;
  * @date 2019/04/05
  **/
 public class JavaScriptEngine {
-    private ScriptEngine engine;
+    private final ScriptEngine engine;
 
     private static int versionCode;
 
@@ -32,7 +32,7 @@ public class JavaScriptEngine {
         private static final JavaScriptEngine INSTANCE = new JavaScriptEngine();
     }
 
-    public static JavaScriptEngine getInstance() {
+    private static JavaScriptEngine getInstance() {
         return JavaScriptEngineHolder.INSTANCE;
     }
 
@@ -40,20 +40,23 @@ public class JavaScriptEngine {
         this.engine = new ScriptEngineManager().getEngineByName(versionCode >= 18 ? "nashorn" : "javascript");
     }
 
-    public Object eval(String expression, ScriptContext ctx) throws ScriptException {
-        return engine.eval(expression, ctx);
+    public static Object eval(String expression, ScriptContext ctx) throws ScriptException {
+        return getEngine().eval(expression, ctx);
     }
 
-    public Object eval(Reader reader, ScriptContext ctx) throws ScriptException {
-        return engine.eval(reader, ctx);
+    public static Object eval(Reader reader, ScriptContext ctx) throws ScriptException {
+        return getEngine().eval(reader, ctx);
     }
 
-    public CompiledScript compile(String expression) throws ScriptException {
-        return ((Compilable) engine).compile(expression);
+    public static CompiledScript compile(String expression) throws ScriptException {
+        return ((Compilable) getEngine()).compile(expression);
     }
 
-    public CompiledScript compile(Reader reader) throws ScriptException {
-        return ((Compilable) engine).compile(reader);
+    public static CompiledScript compile(Reader reader) throws ScriptException {
+        return ((Compilable) getEngine()).compile(reader);
     }
 
+    public static ScriptEngine getEngine() {
+        return getInstance().engine;
+    }
 }
