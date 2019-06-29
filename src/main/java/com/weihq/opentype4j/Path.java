@@ -130,7 +130,7 @@ public class Path extends AbstractParser<Path> {
         if (commands != null) {
             int length = commands.size();
             for (int i = 0; i < length; i++) {
-                this.commands.add(new Command().parse(commands));
+                this.commands.add(new Command().parse((ScriptObjectMirror) commands.get(i + "")));
             }
         }
         this.fill = scriptObjectMirror.get("fill");
