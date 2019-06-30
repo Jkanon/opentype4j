@@ -39,6 +39,9 @@ public class GlyphDataList extends AbstractParser<GlyphDataList> {
     }
 
     public GlyphData get(int index) {
+        if (index < 0 || index >= length) {
+            return null;
+        }
         return glyphs.get(index);
     }
 

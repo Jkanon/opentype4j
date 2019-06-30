@@ -41,6 +41,8 @@ public class GlyphData extends AbstractParser<GlyphData> {
 
     private short numberOfContours;
 
+    private Path pathDefinition;
+
     public Path getPath(double x, double y, double fontSize) {
         Path path = new Path().parse((ScriptObjectMirror) scriptObjectMirror.callMember("getPath", x, y, fontSize));
         path.setWidth(font.getHead().getxMax() - font.getHead().getxMin());
@@ -77,6 +79,7 @@ public class GlyphData extends AbstractParser<GlyphData> {
         this.name = scriptObjectMirror.get("name");
         this.advanceWidth = scriptObjectMirror.getIntValue("advanceWidth");
         this.leftSideBearing = scriptObjectMirror.getIntValue("leftSideBearing");
+        this.pathDefinition = new Path().parse(scriptObjectMirror.get("path"));
         Object unicode = scriptObjectMirror.get("unicode");
         if (unicode != null && !ScriptObjectMirror.isUndefined(unicode)) {
             this.unicode = scriptObjectMirror.getIntValue("unicode");
@@ -192,6 +195,14 @@ public class GlyphData extends AbstractParser<GlyphData> {
         this.numberOfContours = numberOfContours;
     }
 
+    public Path getPathDefinition() {
+        return pathDefinition;
+    }
+
+    public void setPathDefinition(Path pathDefinition) {
+        this.pathDefinition = pathDefinition;
+    }
+
     @Override
     public String toString() {
         return "GlyphData{" +
@@ -206,6 +217,7 @@ public class GlyphData extends AbstractParser<GlyphData> {
                 ", xMax=" + xMax +
                 ", yMax=" + yMax +
                 ", numberOfContours=" + numberOfContours +
+                ", pathDefinition" + pathDefinition +
                 '}';
     }
 }
